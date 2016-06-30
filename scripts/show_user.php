@@ -1,33 +1,38 @@
- <?php 
-    require_once "connect.php";
+<?php 
+    require "connect.php";
 
+    // Get the user ID of the user to show
     $user_id = $_REQUEST['user_id'];
-    
-    //BUILDING the SELECT statement
-    $select_query = "SELECT * FROM users
-                    WHERE user_id = " . $user_id;
 
-    //Run the query
+    // Build the SELECT statement
+    $select_query = "SELECT * FROM users WHERE user_id = " . $user_id;
+
+    // Run the query
     $result = mysqli_query($conn, $select_query);
-    $first_name="Lebron";
-    $last_name="James";
-    $user_image="not/yet/here.jpg";
-    $email="kingjames@gmail.com";
-    $bio = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-    Similique, enim ipsum harum suscipit itaque ipsam nihil cupiditate doloremque ipsa labore, 
-    dignissimos hic obcaecati earum. Voluptatibus maxime accusantium 
-    numquam veritatis ipsa reprehenderit voluptatem, nulla deserunt, 
-    magnam laborum modi architecto minima nemo placeat cumque eveniet 
-    reiciendis delectus aspernatur est. Odit itaque culpa laboriosam porro, 
-    aperiam libero quasi perspiciatis, et sit. Illo ratione obcaecati accusamus, 
-    harum dignissimos rem illum placeat veritatis voluptas soluta, deserunt expedita 
-    ab natus culpa quidem animi alias. Repellat maxime reprehenderit odit dicta magnam, 
-    quasi consequatur pariatur commodi voluptates a, officiis laborum laudantium recusandae 
-    reiciendis, voluptate modi tempora doloribus. Voluptatibus.";
-    $facebook_url="www.facebook.com/jp.nuyens.16";
-    $twitter_url="www.twitter.com/thrash646";
+    if ($result) {
+        $row = mysqli_fetch_array($result);
+        $first_name     = $row['first_name'];
+        $last_name      = $row['last_name'];
+        $bio            = preg_replace("/[\r\n]+/", "</p><p>", $row['bio']);
+        $email          = $row['email'];
+        $facebook_url   = $row['facebook_url'];
+        $twitter_handle = $row['twitter_handle'];
+
+          // Turn $twitter_handle into a URL
+        $twitter_url = "http://www.twitter.com/";
+        $position = strpos($twitter_handle, "@");
+        if ($position === false) {
+            $twitter_url = $twitter_url . $twitter_handle;
+        } else {
+            $twitter_url = $twitter_url . substr($twitter_handle, $position + 1);
+        }
+        // To be added later
+        $user_image = "../../images/missing_user.png";
+    } else {
+        die("Error locating user with ID {$user_id}");
+    }
     
-    ?>
+?>
 
 
 <!DOCTYPE html>

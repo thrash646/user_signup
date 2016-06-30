@@ -1,5 +1,5 @@
 <?php
-require_once "app_config.php";
+require "app_config.php";
 
 $conn = mysqli_connect(DATABASE_HOST, DATABASE_USERNAME, DATABASE_PASS, DATABASE_NAME)
     or die ("<p>Error connecting to database! " .
